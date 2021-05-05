@@ -1,8 +1,9 @@
+'use strict';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { StoreModule } from './store/store.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(StoreModule);
   await app.listen(3000);
 }
 bootstrap();
