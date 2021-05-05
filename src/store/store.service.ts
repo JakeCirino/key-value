@@ -87,6 +87,8 @@ export class StoreService {
      */
     async delete(key: string): Promise<boolean>{
         if(this.keystore == null) await this.loadFile();
+        
+        if(!this.keystore?.has(key)) return false;
 
         this.keystore?.delete(key);
         return await this.saveFile();
