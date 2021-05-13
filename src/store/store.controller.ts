@@ -5,32 +5,32 @@ import { StoreService } from './store.service';
 
 @Controller('store')
 export class StoreController {
-    constructor(private storeService: StoreService){}
-    
+    constructor(private storeService: StoreService) { }
+
     @Put(':key')
-    setKeyValue(@Res({passthrough: true}) res: Response, @Param('key') key: string, @PlainBody() value: string){
+    setKeyValue(@Res({ passthrough: true }) res: Response, @Param('key') key: string, @PlainBody() value: string) {
         //no data provided
-        if(key.length == 0 || value.length == 0){
+        if (key.length == 0 || value.length == 0) {
             res.status(HttpStatus.NOT_ACCEPTABLE);
             return;
         }
-        
+
         this.storeService.put(key, value)
-        .then(result => {
-            res.status(result ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR);
-            return;
-        })
+            .then(result => {
+                res.status(result ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR);
+                return;
+            })
     }
-    
+
     @Get(':key')
-    async getKeyValue(@Res({passthrough: true}) res: Response, @Param('key') key: string): Promise<String>{
-        if(key.length == 0){
+    async getKeyValue(@Res({ passthrough: true }) res: Response, @Param('key') key: string): Promise<String> {
+        if (key.length == 0) {
             res.status(HttpStatus.NOT_ACCEPTABLE);
             return '';
         }
 
         let result: any = await this.storeService.get(key);
-        if(result === undefined){
+        if (result === undefined) {
             res.status(HttpStatus.NOT_FOUND);
             return '';
         }
@@ -39,18 +39,23 @@ export class StoreController {
     }
 
     @Delete(':key')
-    deleteKeyValue(@Res({passthrough: true}) res: Response, @Param('key') key: string){
+    deleteKeyValue(@Res({ passthrough: true }) res: Response, @Param('key') key: string) {
         //no data provided
-        if(key.length == 0){
+        if (key.length == 0) {
             res.status(HttpStatus.NOT_ACCEPTABLE);
             return;
         }
 
         this.storeService.delete(key)
-        .then(result => {
-            res.status(result ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR);
-            return;
-        })
+            .then(result => {
+                res.status(result ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR);
+                return;
+            })
+    }
+
+    @Get()
+    async getKeys(@Res({ passthrough: true }) res: Response) {
+        return this.storeService.getKeys();
     }
 
 }
